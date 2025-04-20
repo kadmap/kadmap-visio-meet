@@ -101,10 +101,18 @@ USER root:root
 # Install psql
 RUN apk add postgresql-client
 
+# Add build arg to control dev dependencies installation
+ARG INSTALL_DEV=true
+
 # Uninstall Meet and re-install it in editable mode along with development
 # dependencies
 RUN pip uninstall -y meet
-RUN pip install -e .[dev]
+# Add retry strategy to handle network issues
+RUN if [ "$INSTALL_DEV" = "true" ]; then \
+    pip install --retries 10 --timeout 120 -e .[dev]; \
+  else \
+    pip install --retries 10 --timeout 120 -e .; \
+  fi
 
 # Restore the un-privileged user running the application
 ARG DOCKER_USER

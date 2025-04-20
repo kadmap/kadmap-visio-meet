@@ -3,6 +3,7 @@ import { HomeRoute } from '@/features/home'
 import { LegalTermsRoute } from '@/features/legalsTerms/LegalTermsRoute'
 import { AccessibilityRoute } from '@/features/legalsTerms/Accessibility'
 import { TermsOfServiceRoute } from '@/features/legalsTerms/TermsOfService'
+import { AutoAuthRoute } from '@/features/auth/AutoAuthRoute'
 
 export const routes: Record<
   | 'home'
@@ -10,7 +11,8 @@ export const routes: Record<
   | 'feedback'
   | 'legalTerms'
   | 'accessibility'
-  | 'termsOfService',
+  | 'termsOfService'
+  | 'autoAuth',
   {
     name: RouteName
     path: RegExp | string
@@ -49,6 +51,11 @@ export const routes: Record<
     name: 'termsOfService',
     path: '/conditions-utilisation',
     Component: TermsOfServiceRoute,
+  },
+  autoAuth: {
+    name: 'autoAuth',
+    path: '/auto_auth',
+    Component: AutoAuthRoute,
   },
 }
 

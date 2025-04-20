@@ -378,6 +378,24 @@ class Base(Configuration):
     OIDC_OP_LOGOUT_ENDPOINT = values.Value(
         None, environ_name="OIDC_OP_LOGOUT_ENDPOINT", environ_prefix=None
     )
+    
+    # Keycloak admin settings for auto-registration
+    KEYCLOAK_BASE_URL = values.Value(
+        None, environ_name="KEYCLOAK_BASE_URL", environ_prefix=None
+    )
+    KEYCLOAK_REALM = values.Value(
+        "meet", environ_name="KEYCLOAK_REALM", environ_prefix=None
+    )
+    KEYCLOAK_ADMIN = values.Value(
+        "admin", environ_name="KEYCLOAK_ADMIN", environ_prefix=None
+    )
+    KEYCLOAK_ADMIN_PASSWORD = values.Value(
+        "admin", environ_name="KEYCLOAK_ADMIN_PASSWORD", environ_prefix=None
+    )
+    KEYCLOAK_ADMIN_CLIENT_ID = values.Value(
+        "admin-cli", environ_name="KEYCLOAK_ADMIN_CLIENT_ID", environ_prefix=None
+    )
+    
     OIDC_AUTH_REQUEST_EXTRA_PARAMS = values.DictValue(
         {}, environ_name="OIDC_AUTH_REQUEST_EXTRA_PARAMS", environ_prefix=None
     )
