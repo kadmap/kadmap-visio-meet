@@ -11,57 +11,86 @@ export const AutoAuthRoute = () => {
   useEffect(() => {
     // Extract query parameters from URL
     const params = new URLSearchParams(window.location.search)
-    const username = params.get('username')
-    const password = params.get('password')
-    const email = params.get('email')
-    const firstname = params.get('firstname')
-    const lastname = params.get('lastname')
+    const kadmap_api_url = params.get('kadmap_api_url')
+    const vfs_base_url = params.get('vfs_base_url')
+    const workspace_id = params.get('workspace_id')
+    const user_id = params.get('user_id')
 
-    if (username && password) {
-      authenticateUser(username, password, email, firstname, lastname)
+    if (kadmap_api_url && vfs_base_url && workspace_id && user_id) {
+      authenticateUser(kadmap_api_url, vfs_base_url, workspace_id, user_id)
     } else {
-      setMessage('Error: Missing username or password')
-      setError('Username and password are required')
+      setMessage('Error: Missing kadmap_api_url, vfs_base_url, workspace_id, or user_id')
+      setError('kadmap_api_url, vfs_base_url, workspace_id, and user_id are required')
       setIsLoading(false)
     }
   }, [])
   
   const authenticateUser = async (
-    username: string, 
-    password: string, 
-    email?: string | null, 
-    firstname?: string | null, 
-    lastname?: string | null
+    kadmap_api_url?: string | null,
+    vfs_base_url?: string | null,
+    workspace_id?: string | null,
+    user_id?: string | null
   ) => {
     try {
-      setMessage(`Authenticating as ${username}...`)
-      
-      // Create the authentication payload
-      const authPayload = {
-        username,
-        password,
-        // Only include additional fields if they exist
-        ...(email && { email }),
-        ...(firstname && { firstname }),
-        ...(lastname && { lastname })
-      }
-      
-      // Send credentials to backend authentication endpoint - note the trailing slash
-      await fetchApi('/auto-authenticate/', {
-        method: 'POST',
-        body: JSON.stringify(authPayload),
-        headers: {
-          'Content-Type': 'application/json'
+      if (kadmap_api_url) {
+        setMessage('Connecting to Kadmap...')
+        
+        // Make API call to kadmap_api_url
+        const kadmapResponse = await fetch(`${kadmap_api_url}/directory/users/${user_id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        
+        if (!kadmapResponse.ok) {
+          throw new Error('Failed to connect to Kadmap')
         }
-      })
-      
-      // If successful, redirect to home or designated page
-      setMessage('Authentication successful! Redirecting...')
-      
-      setTimeout(() => {
-        window.location.href = '/'
-      }, 1000)
-      
+        
+        const kadmapResponseJson = await kadmapResponse.json()
+        const kadmapData = kadmapResponseJson.data
+
+        console.log(kadmapData)
+        
+        // Process kadmap data as needed
+        const email = kadmapData.userKID
+        const username = kadmapData.userKID
+        const fullName = kadmapData.fullName.split(' ')
+        const firstname = fullName[0]
+        const lastname = fullName[1]
+        const password = kadmapData.userId
+
+        setMessage(`Authenticating as ${username}...`)
+        
+        // Create the authentication payload
+        const authPayload = {
+          username,
+          password,
+          email,
+          firstname,
+          lastname,
+          kadmap_api_url,
+          vfs_base_url,
+          workspace_id,
+          user_id
+        }
+        
+        // Send credentials to backend authentication endpoint
+        await fetchApi('/auto-authenticate/', {
+          method: 'POST',
+          body: JSON.stringify(authPayload),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        
+        // If successful, redirect to home or designated page
+        setMessage('Authentication successful! Redirecting...')
+        
+        setTimeout(() => {
+          window.location.href = '/'
+        }, 1000)
+      }
     } catch (err) {
       // If there's an error, show the fallback auth link
       console.error('Authentication error:', err)
