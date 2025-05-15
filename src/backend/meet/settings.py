@@ -624,7 +624,9 @@ class Development(Base):
 
     ALLOWED_HOSTS = ["*"]
     CORS_ALLOW_ALL_ORIGINS = True
-    CSRF_TRUSTED_ORIGINS = ["http://localhost:8072", "http://localhost:3007"]
+    CSRF_TRUSTED_ORIGINS = values.ListValue(
+        default=[], environ_name="CSRF_TRUSTED_ORIGINS", environ_prefix=None
+    )
     DEBUG = True
 
     SESSION_COOKIE_NAME = "meet_sessionid"
@@ -691,7 +693,10 @@ class Production(Base):
         gethostbyname(gethostname()),
     ]
 
-    CSRF_TRUSTED_ORIGINS = values.ListValue([])
+    # CSRF_TRUSTED_ORIGINS = values.ListValue([])
+    CSRF_TRUSTED_ORIGINS = values.ListValue(
+        default=[], environ_name="CSRF_TRUSTED_ORIGINS", environ_prefix=None
+    )
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
 

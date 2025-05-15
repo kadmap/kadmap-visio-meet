@@ -8,7 +8,8 @@ RUN python -m pip install --upgrade pip setuptools
 
 # Upgrade system packages to install security updates
 RUN apk update && \
-  apk upgrade
+  apk upgrade && \
+  apk add --no-cache bash
 
 # ---- Back-end builder image ----
 FROM base AS back-builder
@@ -39,7 +40,8 @@ ARG MEET_STATIC_ROOT=/data/static
 
 RUN apk add \
   pango \
-  rdfind
+  rdfind \
+  bash  # Install bash
 
 # Copy installed python dependencies
 COPY --from=back-builder /install /usr/local
@@ -68,7 +70,8 @@ RUN apk add \
   libffi-dev \
   gdk-pixbuf \
   pango \
-  shared-mime-info
+  shared-mime-info \
+  bash  # Install bash
 
 
 # Copy entrypoint

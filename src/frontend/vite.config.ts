@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react(), tsconfigPaths()],
     server: {
-      port: parseInt(env.VITE_PORT) || 3007,
+      port: parseInt(env.VITE_PORT) || 3000,
       host: env.VITE_HOST || 'localhost',
       allowedHosts: ['.nip.io'],
     },
