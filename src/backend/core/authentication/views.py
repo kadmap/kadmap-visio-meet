@@ -403,7 +403,19 @@ def get_keycloak_admin_token():
         if response.status_code == 200:
             token_data = response.json()
             return token_data.get('access_token')
-    except:
-        pass
-    
-    return None
+        else:
+            error_msg = "Unknown error obtaining Keycloak admin token"
+            try:
+                error_data = response.json()
+                if 'error' in error_data:
+                    error_msg = error_data.get('error_description', error_data.get('error', 'Unknown error'))
+            except:
+                error_msg = f"HTTP error {response.status_code} obtaining Keycloak admin token"
+            raise Exception(error_msg)
+            
+    except requests.RequestException as e:
+        raise Exception(f"Failed to connect to Keycloak server: {str(e)}")
+    except Exception as e:
+        if "error_msg" not in locals():
+            raise Exception(f"Failed to obtain Keycloak admin token: {str(e)}")
+        raise
