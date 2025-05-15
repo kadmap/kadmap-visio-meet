@@ -104,7 +104,7 @@ services:
         VITE_API_BASE_URL: "http://localhost:8071"
     image: meet:frontend-development
     ports:
-      - "3000:8080"
+      - "3007:8080"
 
   dockerize:
     image: jwilder/dockerize
@@ -158,7 +158,7 @@ services:
       KC_DB_SCHEMA: public
       PROXY_ADDRESS_FORWARDING: 'true'
     ports:
-      - "0.0.0.0:8080:8080"
+      - "0.0.0.0:8087:8080"
     depends_on:
       - kc_postgresql
 
