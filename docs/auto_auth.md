@@ -64,13 +64,13 @@ The backend handles the auto authentication in `src/backend/core/authentication/
 To use the auto authentication feature, create a URL with the following format:
 
 ```
-http://{baseUrl}/auto_auth?kadmap_api_url={kadmapApiUrl}&vfs_base_url={vfsBaseUrl}&workspace_id={workspaceId}&user_id={userId}
+http://{baseUrl}/auto_auth?kadmap_api_url={kadmapApiUrl}&vfs_base_url={vfsBaseUrl}&workspace_id={workspaceId}&user_id={userId}&user_KID={userKID}
 ```
 
 ### Example
 
 ```
-http://localhost:3000/auto_auth?kadmap_api_url=https://api.kadmap.com&vfs_base_url=https://vfs.kadmap.com&workspace_id=ws123&user_id=user123
+http://localhost:3000/auto_auth?kadmap_api_url=http%3A%2F%2F192.168.30.77%3A19090%2Fapi%2Fv1&vfs_base_url=http%3A%2F%2F192.168.30.77%3A8001&workspace_id=b77911b0-6c89-4136-a1b9-d50ecaed5597&user_id=891e9432-6655-413e-8840-27ad23c9b223&user_KID=adminmanager%40kadmap.kadmaphq
 ```
 
 ## Important Notes
@@ -79,6 +79,7 @@ http://localhost:3000/auto_auth?kadmap_api_url=https://api.kadmap.com&vfs_base_u
 - User information is fetched from Kadmap API using the provided user_id
 - Authentication uses the Kadmap user data (userKID as username/email, userId as password)
 - All requests are made over a secure connection to protect credentials in production
+- URL parameters should be properly URL-encoded to handle special characters
 
 ## Error Messages
 
