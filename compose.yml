@@ -101,7 +101,9 @@ services:
       dockerfile: ./src/frontend/Dockerfile
       target: frontend-production
       args:
-        VITE_API_BASE_URL: "http://localhost:8071"
+        VITE_API_BASE_URL: "http://${HOST}:8071"
+    env_file:
+      - env.d/development/common
     image: meet:frontend-development
     ports:
       - "3007:8080"
@@ -136,6 +138,8 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:20.0.1
+    env_file:
+      - env.d/development/common
     volumes:
       - ./docker/auth/realm.json:/opt/keycloak/data/import/realm.json
     command:
@@ -143,8 +147,8 @@ services:
       - --features=preview
       - --import-realm
       - --proxy=edge
-      - --hostname-url=http://localhost:8083
-      - --hostname-admin-url=http://localhost:8083/
+      - --hostname-url=http://${HOST}:8083
+      - --hostname-admin-url=http://${HOST}:8083/
       - --hostname-strict=false
       - --hostname-strict-https=false
     environment:

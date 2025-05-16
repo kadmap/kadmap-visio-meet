@@ -27,6 +27,8 @@ BOLD := \033[1m
 RESET := \033[0m
 GREEN := \033[1;32m
 
+# Host
+HOST	           = 192.168.30.77
 
 # -- Database
 
@@ -38,7 +40,7 @@ DB_PORT            = 5432
 DOCKER_UID          = $(shell id -u)
 DOCKER_GID          = $(shell id -g)
 DOCKER_USER         = $(DOCKER_UID):$(DOCKER_GID)
-COMPOSE             = DOCKER_USER=$(DOCKER_USER) docker compose
+COMPOSE             = DOCKER_USER=$(DOCKER_USER) HOST=$(HOST) docker compose
 COMPOSE_EXEC        = $(COMPOSE) exec
 COMPOSE_EXEC_APP    = $(COMPOSE_EXEC) app-dev
 COMPOSE_RUN         = $(COMPOSE) run --rm
